@@ -1,0 +1,6 @@
+Flask
+Flask-Session
+python-dotenv
+elevenlabs
+ibm_watsonx_ai
+openai
