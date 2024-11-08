@@ -4,3 +4,4 @@ python-dotenv
 elevenlabs
 ibm_watsonx_ai
 openai
+quart
