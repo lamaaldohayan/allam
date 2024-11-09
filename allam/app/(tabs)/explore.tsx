@@ -7,10 +7,11 @@ import {
   StyleSheet,
   Image,
   TouchableOpacity,
+  ImageBackground,
   Text,
 } from "react-native";
 import { useNavigation } from "expo-router";
-import { Ionicons } from "@expo/vector-icons"; // Adjust import based on your icon library
+import AntDesign from "@expo/vector-icons/AntDesign";
 
 const LoginForm = () => {
   const navigation = useNavigation();
@@ -18,67 +19,95 @@ const LoginForm = () => {
   const [age, setAge] = useState("");
 
   const handleSubmit = () => {
-    // Handle form submission here, e.g., send data to a server
     console.log("Name:", name);
     console.log("Age:", age);
   };
 
   return (
     <View style={styles.container}>
-      <Image
-        source={require("@/assets/images/back2.png")}
-        style={styles.backLogo}
-      />
-      <Text
-        style={{
-          alignSelf: "center",
-          width: "70%",
-          textAlign: "right",
-          fontSize: 20,
-          marginTop: 50,
-          marginBottom: 10,
-          color: "#0A2074",
-        }}
+      <ImageBackground
+        source={require("@/assets/images/2.png")}
+        style={styles.image}
       >
-        أدخل إسمك :
-      </Text>
-      <TextInput
-        style={styles.input}
-        placeholder=""
-        onChangeText={setName}
-        value={name}
-      />
-      <Text
-        style={{
-          alignSelf: "center",
-          width: "70%",
-          textAlign: "right",
-          fontSize: 20,
-          marginVertical: 10,
-          color: "#0A2074",
-        }}
-      >
-        أدخل عمرك :
-      </Text>
-      <TextInput
-        style={styles.input}
-        placeholder=""
-        onChangeText={setAge}
-        value={age}
-        keyboardType="numeric"
-      />
-      <TouchableOpacity
-        style={styles.button}
-        onPress={() =>
-          navigation.navigate("category", { name: name, age: age })
-        }
-      >
-        <Text style={{ color: "white", fontSize: 20 }}>التالي</Text>
-      </TouchableOpacity>
-      <Image
-        source={require("@/assets/images/allamStory.png")}
-        style={styles.logo}
-      />
+        <View
+          style={{
+            height: "20%",
+            width: "100%",
+            padding: "5%",
+            flexDirection: "row",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
+          <AntDesign
+            name="left"
+            size={24}
+            color="white"
+            onPress={() => {
+              navigation.goBack();
+            }}
+          />
+          <Text
+            style={{
+              color: "white",
+              fontFamily: "Tajawal_700Bold",
+              fontSize: 20,
+            }}
+          >
+            الخطوة ١ من ٣
+          </Text>
+        </View>
+        <Image source={require("@/assets/images/9.png")} style={styles.logo2} />
+        <Text
+          style={{
+            fontFamily: "Tajawal_400Regular",
+            alignSelf: "center",
+            width: "70%",
+            textAlign: "right",
+            fontSize: 20,
+            marginTop: "5%",
+            marginBottom: "5%",
+            color: "white",
+          }}
+        >
+          أدخل إسمك :
+        </Text>
+        <TextInput
+          style={styles.input}
+          placeholder=""
+          onChangeText={setName}
+          value={name}
+        />
+        <Text
+          style={{
+            fontFamily: "Tajawal_400Regular",
+            alignSelf: "center",
+            width: "70%",
+            textAlign: "right",
+            fontSize: 20,
+            marginVertical: 10,
+            color: "white",
+          }}
+        >
+          أدخل عمرك :
+        </Text>
+        <TextInput
+          style={styles.input}
+          placeholder=""
+          onChangeText={setAge}
+          value={age}
+          keyboardType="numeric"
+        />
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() =>
+            navigation.navigate("category", { name: name, age: age })
+          }
+        >
+          <Text style={styles.btnText}>التالي</Text>
+        </TouchableOpacity>
+        <Image source={require("@/assets/images/4.png")} style={styles.logo} />
+      </ImageBackground>
     </View>
   );
 };
@@ -90,8 +119,15 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
   },
   logo: {
-    width: "40%",
-    height: "20%",
+    width: "22%",
+    height: "9%",
+    alignSelf: "center",
+    marginTop: "40%",
+  },
+  logo2: {
+    width: "50%",
+    height: "17%",
+    marginLeft: "40%",
   },
   backLogo: {
     width: "100%",
@@ -106,6 +142,8 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     width: "70%",
     borderRadius: 10,
+    alignSelf: "center",
+    textAlign: "right",
   },
   button: {
     backgroundColor: "#96308F",
@@ -113,6 +151,18 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 10,
     marginTop: 20,
+    width: "30%",
+    alignSelf: "center",
+  },
+  image: {
+    height: "100%",
+    width: "100%",
+  },
+  btnText: {
+    color: "white",
+    fontSize: 20,
+    textAlign: "center",
+    fontFamily: "Tajawal_400Regular",
   },
 });
 

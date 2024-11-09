@@ -7,16 +7,53 @@ import {
   TouchableOpacity,
   TouchableHighlight,
   ScrollView,
+  ImageBackground,
+  ActivityIndicator,
 } from "react-native";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useLocalSearchParams } from "expo-router";
 import { Audio } from "expo-av";
+import AntDesign from "@expo/vector-icons/AntDesign";
+import axios from "axios";
+
+const LoadingScreen = () => {
+  return (
+    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+      <ActivityIndicator size="large" color="#0000ff" />
+    </View>
+  );
+};
+interface ResponseData {
+  story: string;
+}
 
 const StoryScreen = () => {
   const navigation = useNavigation();
   const [sound, setSound] = useState<Audio.Sound | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const { name, age, type, subType, story } = useLocalSearchParams();
+  const apiUrl = "http://127.0.0.1:3000/process_json";
+  const [response, setResponse] = useState<ResponseData | null>(null);
 
   useEffect(() => {
+    async function fetchData() {
+      try {
+        const result = await axios.post<ResponseData>(apiUrl, {
+          type: type,
+          subType: subType,
+          story: story,
+          name: name,
+          age: age,
+        });
+        console.log(result.data);
+        setResponse(result.data);
+        setIsLoading(false);
+      } catch (error) {
+        console.error("Error calling the API:", error);
+        setResponse(null);
+      }
+    }
+    fetchData();
     return () => {
       if (sound) {
         sound.unloadAsync();
@@ -40,47 +77,92 @@ const StoryScreen = () => {
   };
 
   return (
-    <View
-      style={{
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
-      <Image
-        source={require("@/assets/images/story.jpg")}
-        style={styles.storyImage}
-      />
-      <Text style={{ fontSize: 25, height: "5%", fontWeight: "bold" }}>
-        Back to Home
-      </Text>
-      <ScrollView style={{ height: "65%" }}>
-        <Text style={styles.storyText}>
-          It is a long established fact that a reader will be distracted by the
-          readable content of a page when looking at its layout. The point of
-          using Lorem Ipsum is that it has a more-or-less normal distribution of
-          letters, as opposed to using 'Content here, content here', making it
-          look like readable English. Many desktop publishing packages and web
-          page editors now use Lorem Ipsum as their default model text, and a
-          search for 'lorem ipsum' will uncover many web sites still in their
-          infancy. Various versions have evolved over the years, sometimes by
-          accident, sometimes on purpose (injected humour and the like). search
-          for 'lorem ipsum' will uncover many web sites still in their infancy.
-          Various versions have evolved over the years, sometimes by accident,
-          sometimes on purpose (injected humour and the like). search for 'lorem
-          ipsum' will uncover many web sites still in their infancy. Various
-          versions have evolved over the years, sometimes by accident, sometimes
-          on purpose (injected humour and the like).
-        </Text>
-      </ScrollView>
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity style={styles.button} onPress={handlePlayPause}>
-          <Text style={styles.buttonText}>{isPlaying ? "Pause" : "Play"}</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={handleBackToHome}>
-          <Text style={styles.buttonText}>Back to Home</Text>
-        </TouchableOpacity>
-      </View>
+    <View style={{ flex: 1 }}>
+      {isLoading ? (
+        <LoadingScreen />
+      ) : (
+        <View
+          style={{
+            flex: 1,
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <ImageBackground
+            source={require("@/assets/images/2.png")}
+            style={styles.image}
+          >
+            <Image
+              source={require("@/assets/images/story.jpg")}
+              style={styles.storyImage}
+            />
+            <Text
+              style={{
+                fontSize: 25,
+                height: "5%",
+                fontWeight: "bold",
+                color: "white",
+                fontFamily: "Tajawal_700Bold",
+                textAlign: "center",
+              }}
+            >
+              Back to Home
+            </Text>
+            <ScrollView
+              style={{
+                height: "20%",
+                overflow: "scroll",
+              }}
+            >
+              <Text style={styles.storyText}>{story}</Text>
+            </ScrollView>
+            <View style={styles.buttonContainer}>
+              <TouchableOpacity
+                style={styles.button}
+                onPress={handleBackToHome}
+              >
+                <AntDesign
+                  name="download"
+                  size={24}
+                  color="white"
+                  style={{ alignSelf: "center" }}
+                />
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={{ ...styles.button, width: "30%", height: "40%" }}
+                onPress={handlePlayPause}
+              >
+                {isPlaying ? (
+                  <AntDesign
+                    name="pause"
+                    size={50}
+                    color="white"
+                    style={{ alignItems: "center" }}
+                  />
+                ) : (
+                  <AntDesign
+                    name="caretright"
+                    size={50}
+                    color="white"
+                    style={{ alignSelf: "center" }}
+                  />
+                )}
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.button}
+                onPress={handleBackToHome}
+              >
+                <AntDesign
+                  name="home"
+                  size={24}
+                  color="white"
+                  style={{ alignSelf: "center" }}
+                />
+              </TouchableOpacity>
+            </View>
+          </ImageBackground>
+        </View>
+      )}
     </View>
   );
 };
@@ -94,28 +176,38 @@ const styles = StyleSheet.create({
     borderBottomStartRadius: 30,
   },
   storyText: {
-    fontSize: 18,
+    fontSize: 25,
     textAlign: "center",
     marginBottom: 20,
+    color: "white",
+    fontFamily: "Tajawal_400Regular",
   },
   buttonContainer: {
     flexDirection: "row",
+    alignSelf: "center",
     justifyContent: "space-between",
-    width: "80%",
-    height: "10%",
+    width: "100%",
+    height: "30%",
+    paddingHorizontal: "5%",
   },
   button: {
     backgroundColor: "#96308F",
-    padding: 10,
-    borderRadius: 10,
-    flex: 0.4,
-    height: "50%",
+    borderRadius: 50,
+    height: "30%",
     alignItems: "center",
     alignSelf: "center",
+    alignContent: "center",
+    padding: "6%",
+    width: "20%",
   },
   buttonText: {
     color: "white",
     fontWeight: "bold",
+    alignSelf: "center",
+  },
+  image: {
+    height: "100%",
+    width: "100%",
   },
 });
 

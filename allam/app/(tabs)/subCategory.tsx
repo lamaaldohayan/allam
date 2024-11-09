@@ -1,6 +1,14 @@
 import React, { useState } from "react";
-import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Image,
+  ImageBackground,
+} from "react-native";
 import { useNavigation, useLocalSearchParams } from "expo-router";
+import AntDesign from "@expo/vector-icons/AntDesign";
 
 interface Option {
   label: string;
@@ -31,40 +39,65 @@ const SubRadioOptionScreen: React.FC = () => {
 
   return (
     <View style={styles.container}>
-      <Image
-        source={require("@/assets/images/back2.png")}
-        style={styles.backLogo}
-      />
-
-      <Text style={styles.title}>أختر نوع القصة :</Text>
-
-      {options.map((option) => (
-        <TouchableOpacity
-          key={option.label}
-          style={[
-            styles.option,
-            selectedOption === option ? styles.selectedOption : null,
-          ]}
-          onPress={() => handleOptionSelect(option)}
+      <ImageBackground
+        source={require("@/assets/images/2.png")}
+        style={styles.image}
+      >
+        <View
+          style={{
+            height: "20%",
+            width: "100%",
+            padding: "5%",
+            flexDirection: "row",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
         >
+          <AntDesign
+            name="left"
+            size={24}
+            color="white"
+            onPress={() => {
+              navigation.goBack();
+            }}
+          />
           <Text
-            style={[
-              styles.optionText,
-              selectedOption === option ? styles.selectedOptionText : null,
-            ]}
+            style={{
+              color: "white",
+              fontFamily: "Tajawal_700Bold",
+              fontSize: 20,
+            }}
           >
-            {option.label}
+            الخطوة ١ من ٣
           </Text>
-        </TouchableOpacity>
-      ))}
+        </View>
+        <Text style={styles.title}>أختر نوع القصة :</Text>
 
-      <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
-        <Text style={styles.submitButtonText}>التالي</Text>
-      </TouchableOpacity>
-      <Image
-        source={require("@/assets/images/allamStory.png")}
-        style={styles.logo}
-      />
+        {options.map((option, index) => (
+          <TouchableOpacity
+            key={option.label}
+            style={{
+              ...styles.option,
+              ...(selectedOption === option ? styles.selectedOption : null),
+            }}
+            onPress={() => handleOptionSelect(option)}
+          >
+            <Text
+              style={[
+                styles.optionText,
+                selectedOption === option ? styles.selectedOptionText : null,
+              ]}
+            >
+              {option.label}
+            </Text>
+          </TouchableOpacity>
+        ))}
+
+        <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
+          <Text style={styles.submitButtonText}>التالي</Text>
+        </TouchableOpacity>
+        <Image source={require("@/assets/images/4.png")} style={styles.logo} />
+      </ImageBackground>
     </View>
   );
 };
@@ -82,6 +115,9 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     marginTop: 20,
     fontWeight: "bold",
+    textAlign: "right",
+    color: "white",
+    fontFamily: "Tajawal_400Regular",
   },
 
   option: {
@@ -91,6 +127,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     borderRadius: 50,
     width: "70%",
+    alignSelf: "center",
   },
 
   selectedOption: {
@@ -100,6 +137,8 @@ const styles = StyleSheet.create({
   optionText: {
     fontSize: 18,
     textAlign: "center",
+    color: "white",
+    fontFamily: "Tajawal_400Regular",
   },
 
   selectedOptionText: { fontSize: 16, color: "white" },
@@ -116,17 +155,57 @@ const styles = StyleSheet.create({
   submitButtonText: {
     color: "white",
     textAlign: "center",
-    fontWeight: "bold",
+    fontFamily: "Tajawal_400Regular",
   },
-
   logo: {
-    width: "40%",
-    height: "20%",
+    width: "22%",
+    height: "9%",
+    alignSelf: "center",
+    marginTop: "40%",
+  },
+  logo2: {
+    width: "50%",
+    height: "17%",
+    marginLeft: "40%",
   },
   backLogo: {
     width: "100%",
     height: "15%",
     opacity: 0.8,
+    borderRadius: 20,
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: "#ccc",
+    padding: 10,
+    marginBottom: 10,
+    width: "70%",
+    borderRadius: 10,
+    alignSelf: "center",
+    textAlign: "right",
+  },
+  button: {
+    backgroundColor: "#96308F",
+    textDecorationColor: "white",
+    padding: 10,
+    borderRadius: 10,
+    marginTop: 20,
+    width: "30%",
+    alignSelf: "center",
+  },
+  image: {
+    height: "100%",
+    width: "100%",
+  },
+  image2: {
+    height: "10%",
+    width: "100%",
+  },
+  btnText: {
+    color: "white",
+    fontSize: 20,
+    textAlign: "center",
+    fontFamily: "Tajawal_400Regular",
   },
 });
 
@@ -134,6 +213,13 @@ const options: Option[] = [
   { label: "قصص الأنبياء" },
   { label: "قصص الصحابة" },
   { label: "العبادات" },
+];
+const images: Option[] = [
+  { label: "@/assets/images/11.png" },
+  { label: "@/assets/images/12.png" },
+  { label: "@/assets/images/13.png" },
+  { label: "@/assets/images/14.png" },
+  { label: "@/assets/images/15.png" },
 ];
 
 export default SubRadioOptionScreen;
