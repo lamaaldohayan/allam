@@ -17,16 +17,16 @@ def get_age_group(user_age):
 
 def complete_user_prompt_islamic_stories(
     template_parameters,
-    story_type,
+    sub_type,
     user_input,
     user_name,
     user_age
 ):
     # Story type:
     story_type = 'قصص إسلامية. '
-    prompt = f"{story_type}. "
+    
+    prompt = story_type
     age_group = get_age_group(user_age)
-
     if age_group != 'غير محددة':
         prompt += f"القصة موجهة للأطفال بعمر {age_group}. "
     else:
@@ -36,7 +36,7 @@ def complete_user_prompt_islamic_stories(
     normalized_input = user_input.replace("ة", "ه").replace("أ", "ا").replace("ؤ", "و")
 
     # Check for matches in prophets or companions
-    if story_type == 'الأنبياء':
+    if sub_type == 'الأنبياء':
         found = False
         for character_name in template_parameters['character_prophets']:
             normalized_name = character_name.replace("ة", "ه").replace("أ", "ا").replace("ؤ", "و")
@@ -56,7 +56,7 @@ def complete_user_prompt_islamic_stories(
                 f"كن دائماً صادقًا وشجاعًا."
             )
 
-    elif story_type == 'الصحابة':
+    elif sub_type == 'الصحابة':
         found = False
         for character_name in template_parameters['male_companions'] + template_parameters['female_companions']:
             normalized_name = character_name.replace("ة", "ه").replace("أ", "ا").replace("ؤ", "و")
@@ -75,7 +75,7 @@ def complete_user_prompt_islamic_stories(
                 f"{user_name}، عليك دائمًا أن تختار الخير وتبتعد عن السوء، وأن تكون مخلصًا في أفعالك"
             )
 
-    elif story_type == 'تعليم العبادات':
+    elif sub_type == 'تعليم العبادات':
         prompt += f"أروي لي قصة تعليمية حول {user_input}. "
         motivational_message = (
             f"{user_name}، تذكر أن العبادات هي طريقنا للتقرب من الله، والالتزام بها يملأ القلب سعادة ورضا. "
@@ -95,6 +95,7 @@ def complete_user_prompt_islamic_stories(
     output = {
         "user_name": user_name,
         "story_type": story_type,
+        "sub_type": sub_type,
         "user_age": age_group,
         "story_content": prompt,
         "motivational_message": motivational_message,
@@ -102,7 +103,6 @@ def complete_user_prompt_islamic_stories(
     }
 
     return output
-
 # Template parameters setup
 template_params_islamic = {
     'character_prophets': [
@@ -136,7 +136,7 @@ template_params_islamic = {
 
 def complete_user_prompt_Imaginary_stories(user_prompt, user_age, template_parameters, user_name, feature_probability=0.15):
     story_type = "قصص خيالية"
-    prompt = f"{story_type}. "
+    prompt = story_type
     prompt += f"أحكي لي قصة {user_prompt} \n"
 
     # Determine the age group and include it in the prompt
@@ -229,7 +229,7 @@ template_params = {
 
 def complete_user_prompt_educational_stories(user_input, user_age, user_name):
     story_type = "قصص تعليمية"
-    prompt = "قصص تعليمية. "
+    prompt = story_type
     prompt += f'أروي لي قصة عن {user_input}.'
 
         # Determine the age group and include it in the prompt
@@ -375,7 +375,9 @@ import json
 
 
 def generate_saudi_heritage_story_prompt(user_prompt, user_name, user_age, template_parameters):
-    story_type = "قصص حضارة وتراث السعوديه. "
+    story_type = "قصص حضارة وتراث السعوديه"
+    story_content = story_type
+    story_content += f"{user_prompt}\n"
     age_group = get_age_group(user_age)
     mentioned_figure = None
     modern_projects = ["نيوم", "القدية", "رؤية 2030"]
@@ -529,7 +531,7 @@ template_params_saudi_heritage = {
 
 def generate_story_based_on_choice(type,subType,story,name,age):
     if(type=="إسلامية"):
-        prompt=complete_user_prompt_islamic_stories(template_params_islamic,subType,story,name,age,subType)
+        prompt=complete_user_prompt_islamic_stories(template_params_islamic,subType,story,name,age)
         return prompt
     elif(type=="تعليمية"):
         prompt=complete_user_prompt_educational_stories(story,age,name)
@@ -538,7 +540,7 @@ def generate_story_based_on_choice(type,subType,story,name,age):
         prompt=complete_user_prompt_Imaginary_stories(story,age,template_params,name)
     elif(type=="واقعية"):
         prompt=complete_user_prompt_realistic_stories(story,age,template_params_realistic,name)
-    elif(type=="حضارات و تراث السعودية"):
+    elif(type=="حضارة وتراث السعوديه"):
         prompt=generate_saudi_heritage_story_prompt(story,name,age,template_params_saudi_heritage)
     
 

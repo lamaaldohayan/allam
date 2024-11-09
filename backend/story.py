@@ -47,7 +47,9 @@ prompt_input_instruction = """<<SYS>>
  </s><s> [INST]"""
 
 def generateStory(prompt):
-  formattedprompt = f"""<s> [INST] {prompt} [/INST]"""
-  prompt = f"""{prompt_input_instruction}{formattedprompt}"""
-  generated_response_story = model.generate_text(prompt=prompt, guardrails=False)
-  return generated_response_story
+    formattedprompt = f"""<s> [INST] {prompt} [/INST]"""
+    prompt = f"""{prompt_input_instruction}{formattedprompt}"""
+    generated_response_story = model.generate_text(prompt=prompt, guardrails=False)
+    return generated_response_story
+
+
