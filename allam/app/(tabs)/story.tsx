@@ -36,6 +36,13 @@ const StoryScreen = () => {
   const [response, setResponse] = useState<ResponseData | null>(null);
 
   useEffect(() => {
+    console.log({
+      type: type,
+      subType: subType,
+      story: story,
+      name: name,
+      age: age,
+    });
     async function fetchData() {
       try {
         const result = await axios.post<ResponseData>(apiUrl, {
@@ -43,7 +50,7 @@ const StoryScreen = () => {
           subType: subType,
           story: story,
           name: name,
-          age: age,
+          age: parseInt(age),
         });
         console.log(result.data);
         setResponse(result.data);

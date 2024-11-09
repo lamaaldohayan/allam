@@ -16,7 +16,7 @@ import AntDesign from "@expo/vector-icons/AntDesign";
 const LoginForm = () => {
   const navigation = useNavigation();
   const [name, setName] = useState("");
-  const [age, setAge] = useState("");
+  const [age, setAge] = useState();
 
   const handleSubmit = () => {
     console.log("Name:", name);
@@ -144,6 +144,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     alignSelf: "center",
     textAlign: "right",
+    color: "white",
   },
   button: {
     backgroundColor: "#96308F",
